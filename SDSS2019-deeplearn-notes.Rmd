@@ -1,0 +1,16 @@
+---
+title: "Deep Learning course notes"
+author: "Stas Kolenikov"
+date: "May 29, 2019"
+output: html_document
+---
+
+# Deep Learning with R.
+## Kevin Kuo, Javier Luraschi @RStudio
+
+```{r libs}
+library('keras')
+install_keras()
+```
+
+http://rpubs.com/jluraschi
