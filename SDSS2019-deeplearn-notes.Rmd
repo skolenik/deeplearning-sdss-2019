@@ -11,7 +11,17 @@ output: html_document
 ```{r libs}
 library('keras')
 install_keras()
+library('tensorflow')
+install_tensorflow()
+stopifnot( tensorflow::tf_version() >= 1.13 )
 ```
 
 
 Following the slides at http://rpubs.com/jluraschi
+
+
+## RStudio cloud
+
+http://rstd.io/class
+
+Workshop ID: sdss-deep-learning

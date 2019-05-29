@@ -102,14 +102,21 @@ step <- function(x) ifelse(x < 0, 0, 1)
 ```
 
 ```{r}
-for (i in 1:1000) {
+for (i in 1:200) {
   f_1 <- f(w_1, w_2, b, x[,1], x[,2])
-  w_1 <- w_1 - ___
-  w_2 <- w_2 - ___
-  b <- b - ___
+  f_2 <- pmax( f_1, 0 )
+  w_1 <- w_1 - sum(learn * (f_2 - r) * step(f_2) * x[,1])
+  w_2 <- w_2 - sum(learn * (f_2 - r) * step(f_2) * x[,2])
+  b <- b - sum(learn * (f_2 - r) * step(f_2))
 }
 
 (f(w_1, w_2, b, x[,1], x[,2]) > 0.01) == as.logical(r)
+
+if (all((f(w_1, w_2, b, x[,1], x[,2]) > 0.01) == as.logical(r))) {
+  w_1
+  w_2
+  b
+}
 ```
 
 ## 2016: Karpathy -- Exercise (Graph)
@@ -120,12 +127,23 @@ $$ \sigma (x) =  \frac{1 }{1 + e^{-x} } $$
 
 ```{r}
 graph <- list(
+  # compute -x
   forward = function(x) -1 * x,
   backward = function(x) -1,
   node = list(
-    forward = ___,
-    backward = ___,
-    node = ___
+    # compute e(-x) and note its derivatives
+    forward = function(x) e ^ (-x),
+    backward = function(x) - e ^ (-x),
+    node = list(
+      # compute 1 + e(-x)
+      forward = function(x) x + 1,
+      backward = function(x) 1,
+      node = list(
+        # at this stage, the argument is 1+e(-x)
+        forward = function(x) 1 / x,
+        backward = function(x) - 1 / x ^ 2
+      )
+    )
   )
 )
 ```
