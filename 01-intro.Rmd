@@ -1,0 +1,129 @@
+---
+title: "Introduction to Deep Learning -- Intro"
+output: html_notebook
+---
+
+# Intro
+
+## 1958: Rosenblatt -- Perceptron (OR)
+
+Build OR gate with a perceptron,
+
+```{r}
+#             x1 x2                       r = A OR B 
+x <- matrix(c(0, 0,                       #      0
+              0, 1,                       #      1
+              1, 0,                       #      1
+              1, 1), ncol = 2, byrow = T) #      1
+
+r <- c(0, 1, 1, 1)
+
+b <- __
+w <- c(__, __)
+
+ifelse(x %*% w + b > 0, 1, 0) == r
+```
+
+## 1958: Rosenblatt -- Perceptron (AND)
+
+Build AND gate with a perceptron,
+
+```{r}
+#             x1 x2                       r = A AND B 
+x <- matrix(c(0, 0,                       #       0
+              0, 1,                       #       0
+              1, 0,                       #       0
+              1, 1), ncol = 2, byrow = T) #       1
+
+r <- c(0, 0, 0, 1)
+
+b <- __
+w <- c(__, __)
+
+ifelse(x %*% w + b > 0, 1, 0) == r
+```
+
+## 1969: Minsky and Papert -- Perceptron (XOR)
+
+Build XOR gate with a perceptron,
+
+```{r}
+#             A  B                        r = A XOR B 
+x <- matrix(c(0, 0,                       #       0
+              0, 1,                       #       1
+              1, 0,                       #       1
+              1, 1), ncol = 2, byrow = T) #       0
+
+r <- c(0, 1, 1, 0)
+
+b <- __
+w <- c(__, __)
+
+ifelse(x %*% w + b > 0, 1, 0) == r
+```
+
+## 1969: Minsky and Papert -- Layered (XOR)
+
+Build XOR gate with two perceptrons,
+
+```{r}
+#             A  B  (1 for bias)             r = A XOR B 
+x <- matrix(c(0, 0, 1,                       #       0
+              0, 1, 1,                       #       1
+              1, 0, 1,                       #       1
+              1, 1, 1), ncol = 3, byrow = T) #       0
+
+r <- c(0, 1, 1, 0)
+
+w <- matrix(c( ___,  ___,  ___,
+               ___,  ___,  ___,
+               ___,  ___,  ___), ncol = 3, byrow = T)
+              
+yh <- ifelse(x %*% w[,1:2] > 0, 1, 0)
+x3 <- matrix(c(yh[,1], yh[,2], c(1,1,1,1)), ncol = 3)
+
+ifelse(x3 %*% w[,3] > 0, 1, 0) == r
+```
+
+## 1985: Hinton -- Exercise (AND)
+
+Run gradient descent for a single perceptron to train an AND gate.
+
+```{r}
+w_1=0.1; w_2=0.2; b=0.3; learn=0.1;
+x <- matrix(c(0, 0, 1, 1,
+              0, 1, 0, 1), nrow = 4)
+r <-        c(0, 0, 0, 1)
+
+f <- function(w_1, w_2, b, x_1, x_2) w_1 * x_1 + w_2 * x_2 + b
+step <- function(x) ifelse(x < 0, 0, 1)
+```
+
+```{r}
+for (i in 1:1000) {
+  f_1 <- f(w_1, w_2, b, x[,1], x[,2])
+  w_1 <- w_1 - ___
+  w_2 <- w_2 - ___
+  b <- b - ___
+}
+
+(f(w_1, w_2, b, x[,1], x[,2]) > 0.01) == as.logical(r)
+```
+
+## 2016: Karpathy -- Exercise (Graph)
+
+Define the computation graph for the sigmoid function.
+
+$$ \sigma (x) =  \frac{1 }{1 + e^{-x} } $$
+
+```{r}
+graph <- list(
+  forward = function(x) -1 * x,
+  backward = function(x) -1,
+  node = list(
+    forward = ___,
+    backward = ___,
+    node = ___
+  )
+)
+```
