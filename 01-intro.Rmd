@@ -15,11 +15,11 @@ x <- matrix(c(0, 0,                       #      0
               0, 1,                       #      1
               1, 0,                       #      1
               1, 1), ncol = 2, byrow = T) #      1
-
 r <- c(0, 1, 1, 1)
 
-b <- __
-w <- c(__, __)
+# originally empty, to be filled by students
+b <- 0
+w <- c(1, 1)
 
 ifelse(x %*% w + b > 0, 1, 0) == r
 ```
@@ -37,8 +37,9 @@ x <- matrix(c(0, 0,                       #       0
 
 r <- c(0, 0, 0, 1)
 
-b <- __
-w <- c(__, __)
+# originally empty, to be filled by students
+b <- -1
+w <- c(1, 1)
 
 ifelse(x %*% w + b > 0, 1, 0) == r
 ```
@@ -56,8 +57,9 @@ x <- matrix(c(0, 0,                       #       0
 
 r <- c(0, 1, 1, 0)
 
-b <- __
-w <- c(__, __)
+# no solution :-\
+b <- 0
+w <- c(1, -1)
 
 ifelse(x %*% w + b > 0, 1, 0) == r
 ```
@@ -75,9 +77,9 @@ x <- matrix(c(0, 0, 1,                       #       0
 
 r <- c(0, 1, 1, 0)
 
-w <- matrix(c( ___,  ___,  ___,
-               ___,  ___,  ___,
-               ___,  ___,  ___), ncol = 3, byrow = T)
+w <- matrix(c( 1,  1,  1,
+               1,  1,  -1,
+               0,  -1,  0), ncol = 3, byrow = T)
               
 yh <- ifelse(x %*% w[,1:2] > 0, 1, 0)
 x3 <- matrix(c(yh[,1], yh[,2], c(1,1,1,1)), ncol = 3)

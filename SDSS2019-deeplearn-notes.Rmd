@@ -13,4 +13,5 @@ library('keras')
 install_keras()
 ```
 
-http://rpubs.com/jluraschi
+
+Following the slides at http://rpubs.com/jluraschi
