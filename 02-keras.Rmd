@@ -115,7 +115,8 @@ Try adding more layers to make this perform better! (Yeah we're cheating by tuni
 
 Neural nets are easier to train when the predictors have similar magnitudes.
 
-We'll transform our dataset using the recipes package.
+We'll transform our dataset using the `recipes` package. 
+(This is useful so that both training and testing data have unified definitions.)
 
 ```{r}
 rec <- recipe(Kyphosis ~ Age + Number + Start, data = training_data) %>% 
@@ -133,7 +134,7 @@ start_num_levels <- training_data$Start %>%
   unique() %>% 
   length()
 
-age <- layer_input(shape = 1, name = "age")
+age <- layer_input(shape = 1, name = "age")         # this is a tensor of dimension 1, i.e., a vector
 number <- layer_input(shape = 1, name = "number")
 start <- layer_input(shape = 1, name = "start")
 
@@ -142,12 +143,12 @@ start <- layer_input(shape = 1, name = "start")
 #   training instead of specified beforehand. The reason for
 #   `start_num_levels + 1` is so that we accommodate novel
 #   levels in the factor at test time.
-start_embedding <- layer_embedding(start, start_num_levels + 1, 4) %>% 
-  layer_flatten()
+start_embedding <- layer_embedding(start, start_num_levels + 1, 4) %>%    # each level of the original predictor is converted to a dummy level vector
+  layer_flatten()                                                         # make sure that these layers go together
 
-kyphosis <- layer_concatenate(list(age, number, start_embedding)) %>% 
-  layer_dense(8, activation = "relu") %>%
-  layer_dense(2, activation = "softmax", name = "kyphosis")
+kyphosis <- layer_concatenate(list(age, number, start_embedding)) %>%     # list of preceding layers
+  layer_dense(8, activation = "relu") %>%                                 # go through layers
+  layer_dense(2, activation = "softmax", name = "kyphosis")               # this will be the output (two probabilities)
 
 model2 <- keras_model(
   inputs = list(age, number, start),
@@ -175,6 +176,7 @@ prep_keras_data <- function(data) {
     start = data[, "Start", drop = FALSE]
   )
 }
+# need to have named lists with names matching the layer names
 
 training_baked <- bake(rec, training_data, composition = "matrix")
 x <- prep_keras_data(training_baked)
