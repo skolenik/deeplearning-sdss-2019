@@ -61,12 +61,16 @@ roc_curve(predicted, Kyphosis, present) %>% autoplot()
 
 ```{r}
 model1 <- keras_model_sequential() %>% 
-  layer_dense(___, input_shape = ___, activation = "softmax")
+  layer_dense(2,                         # dimensionality of the output, in this case these would be predicted probabilities
+                 input_shape = 3,        # number of inputs; the bias term is added by default automatically
+                 activation = "softmax") # shape of the unit function
+model1
 
+# model1 is modified by reference
 model1 %>% 
-  compile(loss = "binary_crossentropy",
-          optimizer = ___(lr = 0.001),
-          metrics = "accuracy")
+  compile(loss = "binary_crossentropy",           # loss function to evaluate for the network; essentially log likelihood
+          optimizer = optimizer_sgd (lr = 0.001), # stochastic gradient descent; other options pop up
+          metrics = "accuracy")                   # 
 
 ```
 
@@ -75,20 +79,30 @@ Data prep
 ```{r}
 x <- training_data %>% 
   select(Age, Number, Start) %>% 
-  as.matrix()
+  as.matrix()                     # the type has to be transformed to be fed to keras
 
 # As categorical: Kyphosis - 1
-y <- to_categorical(___)
+y <- training_data$Kyphosis %>% 
+  as.integer() %>% 
+  `-`(1) %>% 
+  to_categorical()                # keras function: creates dummy variables for both categories; Python convention to start indexing with 0
 ```
 
 Fit the model
 
 ```{r}
-model1 %>% fit(___)
+model1 %>% fit(x = x, y = y, 
+               batch_size = 32, # split the data set to compute the gradients on a batch per iteration rather the whole data set
+               epochs = 100,    # number of training cycles
+               verbose = 1)     # produces plots along the way
 ```
 
 ```{r}
-predictions <- predict(model1, ___)
+predictions <- predict(model1, 
+                       testing_data %>% 
+                             select(Age, Number, Start) %>% 
+                             as.matrix() # same transformation as for the training data
+                       )
 predicted <- testing_data %>% 
   mutate(present = predictions[,2])
 
@@ -171,7 +185,7 @@ Training
 
 ```{r}
 history <- model2 %>% 
-  fit(x = x, y = y, batch_size = 32, epochs = 500, verbose = 0)
+  fit(x = x, y = y, batch_size = 32, epochs = 500, verbose = 1)
 ```
 
 Evaluate
