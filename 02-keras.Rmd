@@ -148,6 +148,7 @@ start_embedding <- layer_embedding(start, start_num_levels + 1, 4) %>%    # each
 
 kyphosis <- layer_concatenate(list(age, number, start_embedding)) %>%     # list of preceding layers
   layer_dense(8, activation = "relu") %>%                                 # go through layers
+  layer_dropout(0.5) %>%                                      # drop some connections to prevent overfitting; can also regularize
   layer_dense(2, activation = "softmax", name = "kyphosis")               # this will be the output (two probabilities)
 
 model2 <- keras_model(
